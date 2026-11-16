@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+kubeconfig
+kubeconfig.*
+
+# AWS credentials
+.aws/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Operating system and editor
+.DS_Store
+.vscode/
+
+# Local database files
+*.db
+*.sqlite3
