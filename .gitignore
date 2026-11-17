@@ -1,11 +1,23 @@
-# Python
-__pycache__/
-*.pyc
+# Python virtual environments
 .venv/
 venv/
-.pytest_cache/
+env/
 
-# Environment files and secrets
+# Python generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Application logs
+*.log
+logs/
+
+# Deployment backups
+backups/
+
+# Secrets and credentials
 .env
 .env.*
 !.env.example
@@ -13,21 +25,22 @@ venv/
 *.key
 *.p12
 *.pfx
-kubeconfig
-kubeconfig.*
+*.secret
 
-# AWS credentials
-.aws/
-
-# Logs and temporary files
-*.log
-*.tmp
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
 *.swp
 
-# Operating system and editor
-.DS_Store
-.vscode/
+# Temporary files
+*.tmp
+*.bak
 
-# Local database files
-*.db
-*.sqlite3
+# Generated release files
+releases/*.before-test
+releases/*.py.before-test
+
+# Local backup and duplicate release files
+scripts/*.old
+releases/*-working.py
