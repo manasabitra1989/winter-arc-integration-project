@@ -44,3 +44,7 @@ releases/*.py.before-test
 # Local backup and duplicate release files
 scripts/*.old
 releases/*-working.py
+
+# Local backup and duplicate release files
+scripts/*.old
+releases/*-working.py
