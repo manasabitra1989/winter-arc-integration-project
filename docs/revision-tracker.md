@@ -11,10 +11,10 @@ Status:
 | Skill | Status |
 |---|---|
 | Users, groups and permissions | Not assessed |
-| Processes and services | Not assessed |
-| Networking and ports | Not assessed |
-| Logs and troubleshooting | Not assessed |
-| Shell scripting | Not assessed |
+| Processes and services | Practiced — Need Practice |
+| Networking and ports | Practiced — Need Practice |
+| Logs and troubleshooting | Practiced — Need Practice |
+| Shell scripting | Practiced — Need Practice |
 
 ## Docker
 | Skill | Status |
@@ -69,8 +69,8 @@ Status:
 
 | Day | Topic | Status |
 |---|---|---|
-| 30 | Planning and Git | In progress |
-| 31 | Linux and networking | Pending |
+| 30 | Planning and Git | Completed |
+| 31 | Linux and networking | Completed lab — Need Practice |
 | 32 | Docker | Pending |
 | 33 | Docker Compose | Pending |
 | 34 | Kubernetes | Pending |
@@ -79,9 +79,9 @@ Status:
 
 ## Reflection
 
-Strengths: To be completed.
+Strengths: Linux monitoring, systemd, cron, troubleshooting, deployment and rollback.
 
-Areas needing revision: To be completed.
+Areas needing revision: Bash/Python fluency, Kubernetes networking and AWS connectivity.
 
 ## Day 31 Final Verification — 17 November 2026
 
@@ -100,7 +100,7 @@ Areas needing revision: To be completed.
 - Git main: synchronized with origin/main
 
 ### Pending
-- Create and verify GitHub Actions CI workflow
+- GitHub Actions CI verified: PASSED (commit 2189323)
 - Decide whether to commit or ignore screenshots/
 - Review cron and systemd before Docker port mapping
 
