@@ -71,7 +71,7 @@ Status:
 |---|---|---|
 | 30 | Planning and Git | Completed |
 | 31 | Linux and networking | Completed lab — Need Practice |
-| 32 | Docker | Pending |
+| 32 | Docker | Practiced — documentation and Git commit pending |
 | 33 | Docker Compose | Pending |
 | 34 | Kubernetes | Pending |
 | 35 | AWS design | Pending |
