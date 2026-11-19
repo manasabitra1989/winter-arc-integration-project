@@ -49,3 +49,5 @@ releases/*-working.py
 scripts/*.old
 releases/*-working.py
 docs/*.backup
+
+day33-compose/.env

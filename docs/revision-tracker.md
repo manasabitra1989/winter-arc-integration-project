@@ -71,8 +71,8 @@ Status:
 |---|---|---|
 | 30 | Planning and Git | Completed |
 | 31 | Linux and networking | Completed lab — Need Practice |
-| 32 | Docker | Practiced — documentation and Git commit pending |
-| 33 | Docker Compose | Pending |
+| 32 | Docker | Completed — commit b49a4d9 pushed |
+| 33 | Docker Compose | Completed lab — Git commit pending |
 | 34 | Kubernetes | Pending |
 | 35 | AWS design | Pending |
 | 36 | Final integration | Pending |
@@ -110,3 +110,28 @@ Day 32: Containerize existing OpsPulse with Docker.
 ### Important
 Reuse the existing Flask application.
 Do not create a separate project.
+
+
+## Day 33 Final Verification — 19 November 2026
+
+### Verified
+- Docker Compose v5.6.1
+- Flask and PostgreSQL containers healthy
+- Docker DNS and TCP connectivity to db:5432 successful
+- PostgreSQL SQL queries successful
+- GET /health: HTTP 200
+- POST /incidents: HTTP 201, incident ID 1
+- GET /incidents: HTTP 200
+- Persistent data retained after database container recreation
+- Controlled database outage reproduced HTTP 500
+- Logs identified PostgreSQL hostname resolution failure
+- PostgreSQL restarted successfully
+- Incident ID 1 recovered; application returned HTTP 200
+
+### Key Learning
+The Flask liveness endpoint remained healthy while database-dependent
+operations failed. A separate database-aware readiness check would
+improve production reliability.
+
+### Next Assignment
+Day 34: Deploy the existing OpsPulse application to Kubernetes.
