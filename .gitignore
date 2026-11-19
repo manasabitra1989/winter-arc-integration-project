@@ -51,3 +51,5 @@ releases/*-working.py
 docs/*.backup
 
 day33-compose/.env
+
+app/*.day32-backup
