@@ -53,3 +53,9 @@ docs/*.backup
 day33-compose/.env
 
 app/*.day32-backup
+
+# Local backups, credentials, and Python caches
+app/*.before-day34-*
+kubernetes/**/*.before-*
+kubernetes/**/*.yaml.before-*
+*.pyc

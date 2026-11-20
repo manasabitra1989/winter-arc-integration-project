@@ -135,3 +135,39 @@ improve production reliability.
 
 ### Next Assignment
 Day 34: Deploy the existing OpsPulse application to Kubernetes.
+
+
+## Day 34 — Kubernetes Integration
+
+**Status:** Completed — final verification passed
+
+**Implemented:**
+- Local kind cluster running Kubernetes v1.34.11
+- PostgreSQL StatefulSet, headless Service, and 1Gi PVC
+- Flask Deployment and ClusterIP Service
+- ConfigMap and Secret integration
+- Incident API verified against PostgreSQL
+- Flask Pod replacement and automatic recovery
+- PostgreSQL Pod replacement with data persistence
+- Database-aware `/ready` endpoint
+- Rolling update to Deployment Revision 3
+- Liveness and readiness probes
+
+**Troubleshooting:**
+- Resolved cgroup v1 compatibility issue using a compatible kind node image
+- Resolved localhost:8083 connection refusal by restarting port forwarding
+- Investigated readiness probe timeouts during a database outage
+
+**Final verified state:**
+- Flask and PostgreSQL Pods: 1/1 Ready
+- `/health`: HTTP 200
+- `/ready`: HTTP 200
+- Incident ID 1 preserved
+- PVC: Bound, 1Gi
+
+**Not conclusively verified:**
+- EndpointSlice transitioning to ready=false during the database outage
+
+**Documentation:** `docs/day34-kubernetes-lab.md`
+
+**Next:** Day 35 — AWS Architecture and Security revision

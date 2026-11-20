@@ -101,5 +101,19 @@ def list_incidents():
     return jsonify(incidents)
 
 
+
+
+@app.route("/ready")
+def readiness():
+    """Check whether the application can query PostgreSQL."""
+    try:
+        with get_db_connection() as conn:
+            conn.execute("SELECT 1")
+        return jsonify({"status": "ready", "database": "connected"}), 200
+    except psycopg.OperationalError:
+        app.logger.warning("Readiness check failed: PostgreSQL unavailable")
+        return jsonify({"status": "not_ready", "database": "unavailable"}), 503
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
