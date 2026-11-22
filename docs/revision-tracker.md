@@ -171,3 +171,38 @@ Day 34: Deploy the existing OpsPulse application to Kubernetes.
 **Documentation:** `docs/day34-kubernetes-lab.md`
 
 **Next:** Day 35 — AWS Architecture and Security revision
+
+## Day 35 — AWS Architecture and Security Design
+
+**Status:** Documentation completed; final Git verification pending.
+
+### Completed
+- Reused existing AWS default VPC in ap-south-1.
+- Created four private application/database subnets in two AZs.
+- Created and associated one private route table.
+- Created three least-privilege network Security Groups.
+- Reviewed IAM managed policies, inline policies and groups.
+- Designed an ALB + EC2 Auto Scaling + RDS architecture.
+- Documented IAM roles and deployment security.
+- Documented resilience, health checks and failover.
+- Designed CloudWatch observability and incident response.
+- Compared EC2 Auto Scaling and EKS cost drivers.
+- Verified the Day 29 manual RDS snapshot is absent.
+
+### Not deployed
+- Application Load Balancer
+- EC2 Auto Scaling Group
+- Amazon RDS PostgreSQL
+- Amazon EKS
+- NAT Gateway
+
+### Lessons learned
+- Default VPC resources can be reused for a design lab.
+- Private subnet design requires routing and IP checks.
+- Security Groups are stateful.
+- IAM read access does not imply delete permission.
+- Inline policy size limits can block additional policies.
+- Manual RDS snapshots require explicit cleanup review.
+
+### Documentation
+See docs/day35/README.md and supporting design files.
