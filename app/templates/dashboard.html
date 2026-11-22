@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpsPulse | Incident Dashboard</title>
+  <style>
+    :root {
+      font-family: Arial, sans-serif;
+      color: #e7edf7;
+      background: #0c1424;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 32px; }
+    main { max-width: 1100px; margin: auto; }
+    h1 { margin-bottom: 4px; }
+    .subtitle { color: #9daac0; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin: 28px 0;
+    }
+    .card, .panel {
+      background: #17243a;
+      padding: 22px;
+      border-radius: 14px;
+      border: 1px solid #30415c;
+    }
+    .card span { color: #aab7cb; font-size: 14px; }
+    .card strong { display: block; font-size: 36px; margin-top: 12px; }
+    .panel { margin-bottom: 20px; }
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    input, select {
+      background: #0c1424;
+      border: 1px solid #52617b;
+      color: white;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    input { flex: 1; min-width: 220px; }
+    button {
+      border: 0;
+      border-radius: 8px;
+      background: #35b98a;
+      color: #06251d;
+      padding: 12px 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      padding: 13px 9px;
+      border-bottom: 1px solid #30415c;
+    }
+    th { color: #aab7cb; }
+    .table-scroll { overflow-x: auto; }
+    .status { color: #aab7cb; margin-top: 12px; }
+    .error { color: #ff9999; }
+    @media (max-width: 760px) {
+      body { padding: 16px; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>OpsPulse</h1>
+  <p class="subtitle">Production Application Monitoring & Incident Tracker</p>
+
+  <section class="cards">
+    <div class="card"><span>Total Incidents</span><strong id="total">—</strong></div>
+    <div class="card"><span>Open Incidents</span><strong id="open">—</strong></div>
+    <div class="card"><span>Resolved</span><strong id="resolved">—</strong></div>
+    <div class="card"><span>Critical Incidents</span><strong id="critical">—</strong></div>
+  </section>
+
+  <section class="panel">
+    <h2>Create Incident</h2>
+    <form id="incidentForm" class="form-row">
+      <input id="title" placeholder="Describe the incident" maxlength="200" required>
+      <select id="severity">
+        <option>LOW</option>
+        <option selected>MEDIUM</option>
+        <option>HIGH</option>
+        <option>CRITICAL</option>
+      </select>
+      <button type="submit">Create Incident</button>
+    </form>
+    <p id="message" class="status" role="status"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Incident Records</h2>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Incident</th><th>Severity</th><th>Status</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="incidentRows"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+  const message = document.getElementById("message");
+
+  async function loadIncidents() {
+    try {
+      const response = await fetch("/incidents");
+      if (!response.ok) throw new Error("Cannot retrieve incidents");
+
+      const incidents = await response.json();
+
+      document.getElementById("total").textContent = incidents.length;
+      document.getElementById("open").textContent =
+        incidents.filter(i => i.status === "OPEN").length;
+      document.getElementById("resolved").textContent =
+        incidents.filter(i => i.status === "RESOLVED").length;
+      document.getElementById("critical").textContent =
+        incidents.filter(i => i.severity === "CRITICAL").length;
+
+      const tbody = document.getElementById("incidentRows");
+      tbody.replaceChildren();
+ 
+     for (const incident of [...incidents].reverse()) {
+          const row = document.createElement("tr");
+
+  // Display the existing incident information.
+  for (const value of [
+    incident.id,
+    incident.title,
+    incident.severity,
+    incident.status
+  ]) {
+    const cell = document.createElement("td");
+    cell.textContent = value;
+    row.appendChild(cell);
+  }
+
+  // Create the Actions column.
+  const actionCell = document.createElement("td");
+  const button = document.createElement("button");
+
+  const isResolved = incident.status === "RESOLVED";
+
+  button.textContent = isResolved ? "Reopen" : "Resolve";
+
+  button.addEventListener("click", async () => {
+    button.disabled = true;
+
+    const newStatus = isResolved ? "OPEN" : "RESOLVED";
+
+    try {
+      const response = await fetch(`/incidents/${incident.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          status: newStatus
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update incident");
+      }
+
+      await loadIncidents();
+
+      message.textContent =
+        `Incident #${incident.id} updated to ${newStatus}`;
+
+      message.classList.remove("error");
+
+    } catch (error) {
+      message.textContent = error.message;
+      message.classList.add("error");
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  actionCell.appendChild(button);
+  row.appendChild(actionCell);
+
+  tbody.appendChild(row);
+}
+
+      message.classList.remove("error");
+    } catch (error) {
+      message.textContent = "Unable to load incidents: " + error.message;
+      message.classList.add("error");
+    }
+  }
+
+  document.getElementById("incidentForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    message.textContent = "Creating incident...";
+
+    try {
+      const response = await fetch("/incidents", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: document.getElementById("title").value,
+          severity: document.getElementById("severity").value
+        })
+      });
+
+      if (!response.ok) throw new Error("Failed to create incident");
+
+      document.getElementById("incidentForm").reset();
+      await loadIncidents();
+      message.textContent = "Incident created successfully!";
+      message.classList.remove("error");
+    } catch (error) {
+      message.textContent = error.message;
+      message.classList.add("error");
+    }
+  });
+
+  loadIncidents();
+</script>
+</body>
+</html>

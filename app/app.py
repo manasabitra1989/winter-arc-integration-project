@@ -115,5 +115,40 @@ def readiness():
         return jsonify({"status": "not_ready", "database": "unavailable"}), 503
 
 
+
+@app.route("/dashboard")
+def dashboard():
+    from flask import render_template
+    return render_template("dashboard.html")
+
+@app.route("/incidents/<int:incident_id>", methods=["PATCH"])
+def update_incident(incident_id):
+    data = request.get_json(silent=True)
+
+    if not isinstance(data, dict):
+        return jsonify({"error": "A JSON object is required"}), 400
+
+    status = data.get("status")
+
+    if status not in ("OPEN", "RESOLVED"):
+        return jsonify({"error": "Invalid status"}), 400
+
+    with get_db_connection() as conn:
+        incident = conn.execute(
+            """
+            UPDATE incidents
+            SET status = %s
+            WHERE id = %s
+            RETURNING id, title, severity, status, created_at
+            """,
+            (status, incident_id)
+        ).fetchone()
+
+    if incident is None:
+        return jsonify({"error": "Incident not found"}), 404
+
+    return jsonify(incident), 200
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
