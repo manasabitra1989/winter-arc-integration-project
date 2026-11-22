@@ -1,0 +1,18 @@
+digraph G {
+graph [bgcolor="white", fontname="DejaVu Sans", pad="0.28", nodesep="0.48", ranksep="0.75", splines=ortho, labeljust=l, labelloc=t, fontsize=20, fontcolor="#14213d", label="OpsPulse | Implemented Security Group Rules"];
+node [shape=box, style="rounded,filled", fillcolor="#f0f6ff", color="#adc6e6", fontname="DejaVu Sans", fontsize=12, fontcolor="#1c3049", margin="0.2,0.14"];
+edge [color="#456e9e", penwidth=1.6, arrowsize=0.7, fontname="DejaVu Sans", fontsize=10, fontcolor="#365578"];
+
+
+rankdir=LR;
+users [label="Internet users\n0.0.0.0/0",fillcolor="#e7f0ff"];
+alb [label="ALB SG\nsg-0e08f8b68789a4fac\nIN 443 from internet\nOUT 8080 to App SG",fillcolor="#e8f2ff"];
+app [label="App SG\nsg-0a5f99b745a98ff82\nIN 8080 from ALB SG\nOUT 5432 to DB SG",fillcolor="#eaf8ee"];
+db [label="DB SG\nsg-015e80ebc7cff7210\nIN 5432 from App SG\nOUT no rules",fillcolor="#eaf8ee"];
+users -> alb [label="TCP 443"];
+alb -> app [label="TCP 8080"];
+app -> db [label="TCP 5432"];
+note [label="SGs are stateful: return traffic automatically allowed.\nThe ALB, app EC2, and RDS were NOT deployed.", shape=note,fillcolor="#fff7e9",color="#e2b166"];
+db -> note [style=dotted,arrowhead=none];
+
+}

@@ -1,0 +1,16 @@
+digraph G {
+graph [bgcolor="white", fontname="DejaVu Sans", pad="0.28", nodesep="0.48", ranksep="0.75", splines=ortho, labeljust=l, labelloc=t, fontsize=20, fontcolor="#14213d", label="OpsPulse | Proposed Multi-AZ Failure & Recovery"];
+node [shape=box, style="rounded,filled", fillcolor="#f0f6ff", color="#adc6e6", fontname="DejaVu Sans", fontsize=12, fontcolor="#1c3049", margin="0.2,0.14"];
+edge [color="#456e9e", penwidth=1.6, arrowsize=0.7, fontname="DejaVu Sans", fontsize=10, fontcolor="#365578"];
+
+
+rankdir=TB;
+fail [label="Hypothetical failure\nap-south-1a unavailable",fillcolor="#ffe8e7",color="#d27373"];
+alb [label="ALB health checks\nAvoid unavailable targets when\nhealthy alternatives remain",fillcolor="#e8f2ff"];
+appb [label="Surviving app capacity\nEC2 in ap-south-1b\nMay continue serving users",fillcolor="#e8f8ed",color="#64ad82"];
+asg [label="EC2 Auto Scaling\nReplace lost capacity when possible",fillcolor="#fff0df",color="#dbac64"];
+rds [label="RDS Multi-AZ\nManaged failover if primary affected\nBrief reconnection interruption possible",fillcolor="#fff0df",color="#dbac64"];
+validate [label="Validate /health and /ready\nVerify POST /incidents\nMonitor ALB errors and DB connections",fillcolor="#e7f0ff"];
+fail -> alb; alb -> appb;appb -> asg;asg -> rds;rds -> validate;
+
+}

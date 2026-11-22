@@ -1,0 +1,55 @@
+digraph G {
+graph [bgcolor="white", fontname="DejaVu Sans", pad="0.28", nodesep="0.48", ranksep="0.75", splines=ortho, labeljust=l, labelloc=t, fontsize=20, fontcolor="#14213d", label="OpsPulse | Day 35 - Verified AWS Network + Proposed Application Architecture"];
+node [shape=box, style="rounded,filled", fillcolor="#f0f6ff", color="#adc6e6", fontname="DejaVu Sans", fontsize=12, fontcolor="#1c3049", margin="0.2,0.14"];
+edge [color="#456e9e", penwidth=1.6, arrowsize=0.7, fontname="DejaVu Sans", fontsize=10, fontcolor="#365578"];
+
+
+rankdir=TB;
+users [label="Internet users\nHTTPS 443", fillcolor="#e7f0ff"];
+subgraph cluster_vpc {
+ label="EXISTING DEFAULT VPC   172.31.0.0/16   |   ap-south-1"; color="#6793c7"; style="rounded"; penwidth=2;
+ subgraph cluster_public {label="Existing PUBLIC subnets  |  AZ 1a + AZ 1b";color="#a1bde1";style="rounded,dashed";alb [label="PROPOSED\nInternet-facing ALB\nTLS termination", fillcolor="#fff0de", color="#df9839"];}
+ subgraph cluster_app {label="IMPLEMENTED: private APP subnets + proposed EC2 instances";color="#60aa88";style="rounded";
+ appa [label="ap-south-1a\n172.31.96.0/24\nPROPOSED Flask EC2-A",fillcolor="#eaf9f0",color="#6aae91"];
+ appb [label="ap-south-1b\n172.31.97.0/24\nPROPOSED Flask EC2-B",fillcolor="#eaf9f0",color="#6aae91"];
+ }
+ subgraph cluster_db {label="IMPLEMENTED: private DB subnets + proposed managed RDS";color="#60aa88";style="rounded";
+ dba [label="ap-south-1a\n172.31.98.0/24",fillcolor="#eaf9f0"];
+ dbb [label="ap-south-1b\n172.31.99.0/24",fillcolor="#eaf9f0"];
+ rds [label="PROPOSED\nRDS PostgreSQL Multi-AZ\nPlacement managed by AWS",fillcolor="#fff0de",color="#df9839"];
+ }
+ prt [label="IMPLEMENTED private route table\n172.31.0.0/16 to local only\nNo default internet route",fillcolor="#dbf3e5",color="#60aa88"];
+}
+users -> alb [label="443"];
+alb -> appa [label="8080"];
+alb -> appb [label="8080"];
+appa_dummy [style=invis,width=0,height=0,label=""];
+appa_dummy -> prt [style=invis];
+appa_dummy2 [style=invis,width=0,height=0,label=""];
+appa_dummy2 -> dba [style=invis];
+appa_dummy3 [style=invis,width=0,height=0,label=""];
+appa_dummy3 -> dbb [style=invis];
+appa_dummy4 [style=invis,width=0,height=0,label=""];
+appa_dummy4 -> rds [style=invis];
+appa_dummy5 [style=invis,width=0,height=0,label=""];
+appa_dummy5 -> appa [style=invis];
+appa_dummy6 [style=invis,width=0,height=0,label=""];
+appa_dummy6 -> appb [style=invis];
+appa_dummy7 [style=invis,width=0,height=0,label=""];
+appa_dummy7 -> alb [style=invis];
+appa_dummy8 [style=invis,width=0,height=0,label=""];
+appa_dummy8 -> users [style=invis];
+appa_dummy9 [style=invis,width=0,height=0,label=""];
+appa_dummy9 -> rds [style=invis];
+appa_dummy10 [style=invis,width=0,height=0,label=""];
+appa_dummy10 -> prt [style=invis];
+appb -> rds [label="5432"];
+appa_dummy11 [style=invis,width=0,height=0,label=""];
+appa_dummy11 -> rds [style=invis];
+appa_dummy12 [style=invis,width=0,height=0,label=""];
+appa_dummy12 -> dba [style=invis];
+appa_dummy13 [style=invis,width=0,height=0,label=""];
+appa_dummy13 -> dbb [style=invis];
+appa_dummy14 [style=invis,width=0,height=0,label=""]; appa -> rds [label="5432"];
+
+}

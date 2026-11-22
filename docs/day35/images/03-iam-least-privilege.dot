@@ -1,0 +1,20 @@
+digraph G {
+graph [bgcolor="white", fontname="DejaVu Sans", pad="0.28", nodesep="0.48", ranksep="0.75", splines=ortho, labeljust=l, labelloc=t, fontsize=20, fontcolor="#14213d", label="OpsPulse | IAM Roles - Proposed vs Actual IAM Review"];
+node [shape=box, style="rounded,filled", fillcolor="#f0f6ff", color="#adc6e6", fontname="DejaVu Sans", fontsize=12, fontcolor="#1c3049", margin="0.2,0.14"];
+edge [color="#456e9e", penwidth=1.6, arrowsize=0.7, fontname="DejaVu Sans", fontsize=10, fontcolor="#365578"];
+
+
+rankdir=LR;
+subgraph cluster_roles { label="PROPOSED roles (not created)"; style="rounded,dashed";color="#e1a14b";
+pipeline [label="GitHub Actions OIDC\nDeployment role\nScoped deploy actions",fillcolor="#fff2e0"];
+workload [label="EC2 instance profile\nApplication role\nOnly needed AWS APIs",fillcolor="#fff2e0"];
+operator [label="Approved human operator\nMFA / approved identity\nLimited observability + SSM",fillcolor="#fff2e0"];
+}
+subgraph cluster_actual {label="ACTUAL Day 35 findings";style="rounded";color="#67aa84";
+learner [label="IAM user: devops-learner\n10 attached managed policies\n7 inline policies\n0 group memberships",fillcolor="#e9f9ef"];
+error [label="Cleanup attempt: AccessDenied\nrds:DeleteDBSnapshot\nInline quota: 2048 chars",fillcolor="#ffefef",color="#d58b8b"];
+}
+learner -> error [label="Observed"];
+pipeline -> learner [style=dashed,label="Separate identity model",arrowhead=none];
+
+}

@@ -1,0 +1,17 @@
+digraph G {
+graph [bgcolor="white", fontname="DejaVu Sans", pad="0.28", nodesep="0.48", ranksep="0.75", splines=ortho, labeljust=l, labelloc=t, fontsize=20, fontcolor="#14213d", label="OpsPulse | Proposed Observability and First Response"];
+node [shape=box, style="rounded,filled", fillcolor="#f0f6ff", color="#adc6e6", fontname="DejaVu Sans", fontsize=12, fontcolor="#1c3049", margin="0.2,0.14"];
+edge [color="#456e9e", penwidth=1.6, arrowsize=0.7, fontname="DejaVu Sans", fontsize=10, fontcolor="#365578"];
+
+
+rankdir=LR;
+signals [shape=record,label="{ALB | Healthy targets and 5xx | Target latency}",fillcolor="#edf4ff"];
+app [shape=record,label="{Application | Error rate and API latency | /health and /ready}",fillcolor="#edf9f1"];
+compute [shape=record,label="{Compute | CPU and memory | Auto Scaling activity}",fillcolor="#edf4ff"];
+db [shape=record,label="{Database | Connection count and availability | RDS events}",fillcolor="#edf9f1"];
+deploy [shape=record,label="{Deployment | Failed rollout | Health verification}",fillcolor="#edf4ff"];
+cloudwatch [label="PROPOSED\nCloudWatch metrics, logs, alarms\n+ CI/CD deployment signals",fillcolor="#fff0dc"];
+respond [label="First response\nInspect target health\nCheck app logs / readiness\nCheck RDS and recent changes\nRollback if needed",fillcolor="#eaf9ee"];
+signals -> cloudwatch;app -> cloudwatch;compute -> cloudwatch;db -> cloudwatch;deploy -> cloudwatch;cloudwatch -> respond;
+
+}
